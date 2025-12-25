@@ -1,13 +1,13 @@
 # Threshold Compass — Development State
 
-> Updated: 2025-12-24 @ 17:00
+> Updated: 2025-12-24 @ 22:30
 
 ---
 
 ## Current Phase
 
-**Phase:** Phase 2 Complete - Integration Ready
-**Status:** GitHub pushed, awaiting Supabase credentials
+**Phase:** Phase 3 - Feature Complete MVP
+**Status:** All core features built, live on Supabase
 
 ---
 
@@ -15,14 +15,19 @@
 
 - [x] Project initialized (Next.js 16 + TypeScript + Tailwind)
 - [x] Pre-built files copied (types, algorithms, content, tailwind config)
-- [ ] Schema deployed to Supabase ← WAITING FOR USER
+- [x] Schema deployed to Supabase
 - [x] Auth flow pages created (/login, /signup, /auth/callback)
 - [x] Compass page with live carryover calculation
+- [x] Protocol progress tracker (10-dose, phase display, milestones)
 - [x] Dose logging API (/api/doses) - full CRUD
 - [x] Check-in API (/api/check-ins) - full CRUD
 - [x] UI Component Library (Badge, Button, Card, Input, Modal, Slider)
 - [x] Drift Mode complete (breathing, grounding, crisis resources)
 - [x] Carryover calculation integrated in compass
+- [x] Insights page with pattern detection & threshold range display
+- [x] Settings page with user preferences display
+- [x] Threshold feel selector (under/sweetspot/over)
+- [x] Context tags (work/creative/social/physical/rest)
 - [x] GitHub repo created: taylorsterlingwrites/threshold-compass
 - [ ] PWA configured
 - [ ] Deployed to Vercel
@@ -33,7 +38,8 @@
 
 | Task | Agent | Status | Notes |
 |------|-------|--------|-------|
-| Supabase setup | User | Waiting | Need project credentials |
+| PWA configuration | - | Pending | Service worker for offline Drift |
+| Vercel deployment | - | Pending | Connect to GitHub repo |
 
 ---
 
@@ -47,11 +53,7 @@
 
 ## Blockers
 
-- **SUPABASE CREDENTIALS NEEDED**
-  - Create project at https://supabase.com/dashboard
-  - Get SUPABASE_URL and SUPABASE_ANON_KEY from Settings → API
-  - Update .env.local with real values
-  - Run schema.sql in SQL Editor
+- None! All core features built and Supabase connected.
 
 ---
 

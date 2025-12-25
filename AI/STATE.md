@@ -1,13 +1,13 @@
 # Threshold Compass — Development State
 
-> Updated: 2025-12-24
+> Updated: 2025-12-24 @ 17:00
 
 ---
 
 ## Current Phase
 
-**Phase:** Foundation → Phase 2 Ready
-**Status:** Checkpoint 1 VERIFIED ✓
+**Phase:** Phase 2 Complete - Integration Ready
+**Status:** GitHub pushed, awaiting Supabase credentials
 
 ---
 
@@ -17,10 +17,13 @@
 - [x] Pre-built files copied (types, algorithms, content, tailwind config)
 - [ ] Schema deployed to Supabase ← WAITING FOR USER
 - [x] Auth flow pages created (/login, /signup, /auth/callback)
-- [x] Compass page rendering
-- [x] Dose logging functional (UI ready, needs Supabase)
+- [x] Compass page with live carryover calculation
+- [x] Dose logging API (/api/doses) - full CRUD
+- [x] Check-in API (/api/check-ins) - full CRUD
+- [x] UI Component Library (Badge, Button, Card, Input, Modal, Slider)
 - [x] Drift Mode complete (breathing, grounding, crisis resources)
-- [ ] Carryover calculation integrated
+- [x] Carryover calculation integrated in compass
+- [x] GitHub repo created: taylorsterlingwrites/threshold-compass
 - [ ] PWA configured
 - [ ] Deployed to Vercel
 
@@ -67,12 +70,16 @@
 
 1. [x] Initialize Next.js project
 2. [x] Copy pre-built files (types.ts, schema.sql, algorithms)
-3. [ ] **USER ACTION:** Create Supabase project
-4. [ ] **USER ACTION:** Run schema.sql in SQL Editor
-5. [ ] **USER ACTION:** Update .env.local with credentials
-6. [ ] Test full auth flow end-to-end
-7. [ ] Connect carryover algorithm to compass display
-8. [ ] Implement dose logging with Supabase
+3. [x] Build UI component library
+4. [x] Create dose/check-in API routes
+5. [x] Connect carryover algorithm to compass display
+6. [x] Push to GitHub (taylorsterlingwrites/threshold-compass)
+7. [ ] **USER ACTION:** Create Supabase project
+8. [ ] **USER ACTION:** Run schema.sql in SQL Editor
+9. [ ] **USER ACTION:** Update .env.local with credentials
+10. [ ] Test full auth flow end-to-end
+11. [ ] Configure PWA service worker
+12. [ ] Deploy to Vercel
 
 ---
 
@@ -83,10 +90,12 @@
 | `/login` | ✓ | Email/password login |
 | `/signup` | ✓ | Registration with onboarding redirect |
 | `/auth/callback` | ✓ | OAuth callback handler |
-| `/compass` | ✓ | Home with carryover display (static) |
-| `/log` | ✓ | Dose + check-in forms |
+| `/compass` | ✓ | Home with LIVE carryover + dose history |
+| `/log` | ✓ | Dose + check-in forms with API integration |
 | `/drift` | ✓ | 4-7-8 breathing, 5-4-3-2-1 grounding, crisis |
 | `/onboarding` | ✓ | 3-step intro |
+| `/api/doses` | ✓ | POST/GET dose logs with carryover calc |
+| `/api/check-ins` | ✓ | POST/GET check-ins |
 
 ---
 

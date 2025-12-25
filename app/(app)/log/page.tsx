@@ -30,13 +30,37 @@ function LogPageContent() {
     setLoading(true);
     setError(null);
 
-    // TODO: Calculate carryover using algorithm
-    // TODO: Save to Supabase
+    try {
+      // Prepare dose data
+      const doseData = {
+        batch_id: batchId || 'default-batch', // TODO: Replace with actual batch selection
+        amount: parseFloat(amount),
+        food_state: 'empty' as const, // TODO: Add food_state selection to form
+        intention: 'Baseline dose', // TODO: Add intention field to form
+      };
 
-    // For now, simulate success
-    await new Promise((r) => setTimeout(r, 500));
-    setLoading(false);
-    router.push('/compass');
+      // Submit to API
+      const response = await fetch('/api/doses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(doseData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to log dose');
+      }
+
+      // Success - redirect to compass
+      router.push('/compass');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCheckInSubmit = async (e: React.FormEvent) => {
@@ -44,11 +68,44 @@ function LogPageContent() {
     setLoading(true);
     setError(null);
 
-    // TODO: Save check-in to Supabase
+    try {
+      // Prepare check-in data
+      const checkInData = {
+        phase: 'active' as const, // TODO: Determine phase based on time since last dose
+        conditions: {
+          load: 'med' as const, // TODO: Add conditions form fields
+          noise: 'med' as const,
+          schedule: 'mixed' as const,
+        },
+        signals: {
+          energy,
+          clarity,
+          stability,
+        },
+      };
 
-    await new Promise((r) => setTimeout(r, 500));
-    setLoading(false);
-    router.push('/compass');
+      // Submit to API
+      const response = await fetch('/api/check-ins', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(checkInData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit check-in');
+      }
+
+      // Success - redirect to compass
+      router.push('/compass');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (isCheckIn) {

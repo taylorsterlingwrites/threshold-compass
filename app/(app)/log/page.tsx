@@ -18,6 +18,8 @@ function LogPageContent() {
   const [batchId, setBatchId] = useState('');
   const [foodState, setFoodState] = useState<'empty' | 'light' | 'full'>('empty');
   const [intention, setIntention] = useState('');
+  const [thresholdFeel, setThresholdFeel] = useState<'under' | 'sweetspot' | 'over' | null>(null);
+  const [context, setContext] = useState<'work' | 'creative' | 'social' | 'physical' | 'rest' | null>(null);
 
   // Check-in state
   const [energy, setEnergy] = useState(3);
@@ -356,6 +358,86 @@ function LogPageContent() {
             rows={3}
             required
           />
+        </div>
+
+        {/* Context (Phase 2) */}
+        <div>
+          <label className="block font-mono text-sm uppercase tracking-wide text-ivory/60 mb-3">
+            Context <span className="text-ivory/40">(optional)</span>
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { value: 'work', emoji: '💼', label: 'Work' },
+              { value: 'creative', emoji: '🎨', label: 'Creative' },
+              { value: 'social', emoji: '👥', label: 'Social' },
+              { value: 'physical', emoji: '🏃', label: 'Physical' },
+              { value: 'rest', emoji: '🧘', label: 'Rest' },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setContext(context === opt.value as typeof context ? null : opt.value as typeof context)}
+                className={`px-3 py-2 rounded-sm font-mono text-sm ${
+                  context === opt.value
+                    ? 'bg-violet text-black'
+                    : 'bg-charcoal border border-ivory/20 text-ivory/60'
+                }`}
+              >
+                {opt.emoji} {opt.label}
+              </button>
+            ))}
+          </div>
+          <p className="text-ivory/40 text-xs mt-1">
+            What will you be doing today? Helps track best contexts.
+          </p>
+        </div>
+
+        {/* Threshold Feel (Post-Dose) */}
+        <div className="bg-charcoal/30 border border-violet/20 rounded-sm p-4">
+          <label className="block font-mono text-sm uppercase tracking-wide text-violet mb-3">
+            How did this dose feel?
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setThresholdFeel(thresholdFeel === 'under' ? null : 'under')}
+              className={`py-3 rounded-sm font-mono text-sm flex flex-col items-center gap-1 ${
+                thresholdFeel === 'under'
+                  ? 'bg-blue-500 text-black'
+                  : 'bg-charcoal border border-ivory/20 text-ivory/60'
+              }`}
+            >
+              <span className="text-lg">↓</span>
+              <span>Under</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setThresholdFeel(thresholdFeel === 'sweetspot' ? null : 'sweetspot')}
+              className={`py-3 rounded-sm font-mono text-sm flex flex-col items-center gap-1 ${
+                thresholdFeel === 'sweetspot'
+                  ? 'bg-green-500 text-black'
+                  : 'bg-charcoal border border-ivory/20 text-ivory/60'
+              }`}
+            >
+              <span className="text-lg">●</span>
+              <span>Sweet Spot</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setThresholdFeel(thresholdFeel === 'over' ? null : 'over')}
+              className={`py-3 rounded-sm font-mono text-sm flex flex-col items-center gap-1 ${
+                thresholdFeel === 'over'
+                  ? 'bg-red-500 text-black'
+                  : 'bg-charcoal border border-ivory/20 text-ivory/60'
+              }`}
+            >
+              <span className="text-lg">↑</span>
+              <span>Over</span>
+            </button>
+          </div>
+          <p className="text-ivory/40 text-xs mt-2 text-center">
+            Optional — fill in later or skip if unsure
+          </p>
         </div>
 
         {error && (

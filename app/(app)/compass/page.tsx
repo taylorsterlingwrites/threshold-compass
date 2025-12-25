@@ -86,6 +86,24 @@ export default async function CompassPage() {
   // Get latest dose for display
   const latestDose = recentDoses?.[0] as DoseLog | undefined;
 
+  // Fetch all doses for protocol progress
+  const { data: allDoses } = await supabase
+    .from('dose_logs')
+    .select('id')
+    .eq('user_id', authUser.id);
+
+  const totalDoses = allDoses?.length || 0;
+  const currentPhase = totalDoses <= 4 ? 'baseline' : 'context';
+  const protocolComplete = totalDoses >= 10;
+
+  // Milestones: 1, 4 (critical), 7, 10
+  const milestones = [
+    { dose: 1, label: 'First Flame', critical: false },
+    { dose: 4, label: 'Baseline', critical: true },
+    { dose: 7, label: 'Halfway', critical: false },
+    { dose: 10, label: 'Complete', critical: false },
+  ];
+
   return (
     <main className="min-h-screen bg-black text-ivory p-6">
       {/* Header */}
@@ -98,6 +116,67 @@ export default async function CompassPage() {
           DRIFT
         </Link>
       </header>
+
+      {/* Protocol Progress */}
+      <section className="mb-8">
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="font-mono text-sm uppercase tracking-wide text-ivory/60">
+            {protocolComplete ? 'Protocol Complete' : currentPhase === 'baseline' ? 'Phase 1: Baseline' : 'Phase 2: Context'}
+          </h2>
+          <span className="font-mono text-sm text-ivory/40">
+            {totalDoses}/10 doses
+          </span>
+        </div>
+        <div className="flex gap-1">
+          {Array.from({ length: 10 }, (_, i) => {
+            const doseNum = i + 1;
+            const milestone = milestones.find(m => m.dose === doseNum);
+            const isCompleted = totalDoses >= doseNum;
+            const isCurrent = totalDoses + 1 === doseNum;
+            const isCritical = milestone?.critical;
+
+            return (
+              <div
+                key={doseNum}
+                className="relative flex-1"
+              >
+                <div
+                  className={`h-2 rounded-sm transition-all ${
+                    isCompleted
+                      ? doseNum <= 4
+                        ? 'bg-violet'
+                        : 'bg-orange'
+                      : isCurrent
+                      ? 'bg-ivory/30 animate-pulse'
+                      : 'bg-ivory/10'
+                  } ${isCritical && isCompleted ? 'ring-2 ring-orange ring-offset-1 ring-offset-black' : ''}`}
+                />
+                {milestone && (
+                  <div className={`absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs whitespace-nowrap ${
+                    isCompleted ? 'text-ivory/60' : 'text-ivory/30'
+                  }`}>
+                    {isCritical ? '◆' : '·'}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {totalDoses > 0 && totalDoses < 10 && (
+          <p className="text-ivory/40 text-xs mt-4 text-center">
+            {totalDoses === 4
+              ? '🎯 Baseline complete! Moving to context exploration.'
+              : totalDoses < 4
+              ? `${4 - totalDoses} more dose${4 - totalDoses > 1 ? 's' : ''} until baseline established`
+              : `${10 - totalDoses} more dose${10 - totalDoses > 1 ? 's' : ''} to complete protocol`}
+          </p>
+        )}
+        {protocolComplete && (
+          <p className="text-green-400 text-xs mt-4 text-center font-mono uppercase">
+            ✓ Your threshold range is established
+          </p>
+        )}
+      </section>
 
       {/* Carryover Status */}
       <section className="mb-8">

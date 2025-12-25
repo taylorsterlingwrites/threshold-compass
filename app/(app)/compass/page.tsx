@@ -8,8 +8,15 @@ import type { DoseLog, User, CarryoverTier } from '@/types';
 const TIER_COLORS: Record<CarryoverTier, string> = {
   clear: 'text-green-400',
   mild: 'text-yellow-400',
-  moderate: 'text-orange',
+  moderate: 'text-orange-400',
   high: 'text-red-400',
+};
+
+const TIER_BAR_COLORS: Record<CarryoverTier, string> = {
+  clear: 'bg-green-400',
+  mild: 'bg-yellow-400',
+  moderate: 'bg-orange-400',
+  high: 'bg-red-400',
 };
 
 export default async function CompassPage() {
@@ -106,7 +113,7 @@ export default async function CompassPage() {
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-1 h-2 bg-ivory/10 rounded-full overflow-hidden">
               <div
-                className={`h-full ${carryover.tier === 'clear' ? 'bg-green-400' : carryover.tier === 'mild' ? 'bg-yellow-400' : carryover.tier === 'moderate' ? 'bg-orange' : 'bg-red-400'}`}
+                className={`h-full transition-all duration-500 ${TIER_BAR_COLORS[carryover.tier]}`}
                 style={{ width: `${carryover.score}%` }}
               />
             </div>

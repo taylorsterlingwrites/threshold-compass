@@ -16,6 +16,8 @@ function LogPageContent() {
   const [substance, setSubstance] = useState<SubstanceType>('psilocybin');
   const [amount, setAmount] = useState('');
   const [batchId, setBatchId] = useState('');
+  const [foodState, setFoodState] = useState<'empty' | 'light' | 'full'>('empty');
+  const [intention, setIntention] = useState('');
 
   // Check-in state
   const [energy, setEnergy] = useState(3);
@@ -33,10 +35,10 @@ function LogPageContent() {
     try {
       // Prepare dose data
       const doseData = {
-        batch_id: batchId || 'default-batch', // TODO: Replace with actual batch selection
+        batch_id: batchId || 'default-batch',
         amount: parseFloat(amount),
-        food_state: 'empty' as const, // TODO: Add food_state selection to form
-        intention: 'Baseline dose', // TODO: Add intention field to form
+        food_state: foodState,
+        intention: intention,
       };
 
       // Submit to API
@@ -296,6 +298,66 @@ function LogPageContent() {
           />
         </div>
 
+        {/* Food State */}
+        <div>
+          <label className="block font-mono text-sm uppercase tracking-wide text-ivory/60 mb-3">
+            Food State
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setFoodState('empty')}
+              className={`py-3 rounded-sm font-mono uppercase text-sm ${
+                foodState === 'empty'
+                  ? 'bg-orange text-black'
+                  : 'bg-charcoal border border-ivory/20 text-ivory/60'
+              }`}
+            >
+              Empty
+            </button>
+            <button
+              type="button"
+              onClick={() => setFoodState('light')}
+              className={`py-3 rounded-sm font-mono uppercase text-sm ${
+                foodState === 'light'
+                  ? 'bg-orange text-black'
+                  : 'bg-charcoal border border-ivory/20 text-ivory/60'
+              }`}
+            >
+              Light
+            </button>
+            <button
+              type="button"
+              onClick={() => setFoodState('full')}
+              className={`py-3 rounded-sm font-mono uppercase text-sm ${
+                foodState === 'full'
+                  ? 'bg-orange text-black'
+                  : 'bg-charcoal border border-ivory/20 text-ivory/60'
+              }`}
+            >
+              Full
+            </button>
+          </div>
+          <p className="text-ivory/40 text-xs mt-1">
+            Food state affects absorption and onset time
+          </p>
+        </div>
+
+        {/* Intention */}
+        <div>
+          <label className="block font-mono text-sm uppercase tracking-wide text-ivory/60 mb-2">
+            Intention
+          </label>
+          <textarea
+            value={intention}
+            onChange={(e) => setIntention(e.target.value)}
+            className="w-full bg-charcoal border border-ivory/20 rounded-sm px-3 py-3 text-ivory placeholder:text-ivory/40 focus:outline-none focus:border-orange resize-none"
+            placeholder="What's your intention for this dose?"
+            rows={3}
+            required
+          />
+        </div>
+
         {error && (
           <div className="bg-red-900/20 border border-red-500/50 rounded-sm px-3 py-2 text-red-400 text-sm">
             {error}
@@ -317,7 +379,7 @@ function LogPageContent() {
 
         <button
           type="submit"
-          disabled={loading || !amount}
+          disabled={loading || !amount || !intention}
           className="w-full bg-orange text-black font-mono uppercase tracking-wide py-4 rounded-sm hover:bg-orange/90 disabled:opacity-50 transition-colors"
         >
           {loading ? 'Logging...' : 'Log Dose'}
